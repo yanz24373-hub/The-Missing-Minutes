@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE svg
+  PUBLIC '-//W3C//DTD SVG 1.0//EN'
+  'http://www.w3.org/TR/2001/REC-SVG-20010904/DTD/svg10.dtd'>
+<svg width="1000" height="990" preserveAspectRatio="xMinYMin meet" viewBox="0 0 1000 990" xmlns="http://www.w3.org/2000/svg" version="1.0" fill-rule="evenodd" xmlns:xlink="http://www.w3.org/1999/xlink">
+	<title>...</title>
+	<desc>...</desc>
+	<clipPath id="clip">
+		<rect x="0" y="0" width="1000" height="990"/>
+	</clipPath>
+	<g id="group" transform="scale(1,-1) translate(0,-990)" style="clip-path: url(#clip)">
+		<g transform="">
+			<text x="35" y="950" style="font-family: Helvetica-Bold; font-size: 24px;fill: rgb(9%,20%,26%); stroke:none;" transform="translate(0,1900) scale(1,-1)">The Missing Minutes | Runtime flow</text>
+			<text x="35" y="926" style="font-family: Helvetica; font-size: 12px;fill: rgb(32%,38%,44%); stroke:none;" transform="translate(0,1852) scale(1,-1)">Main-controller state transitions and continuous tray services</text>
+			<rect x="55" y="790" width="535" height="105" rx="10" ry="10" style="stroke: rgb(72%,80%,81%); stroke-linecap: butt; stroke-width: 1; fill: rgb(92%,96%,96%); fill-rule: evenodd;"/>
+			<text x="213.14" y="870" style="font-family: Helvetica-Bold; font-size: 16px;fill: rgb(9%,20%,26%); stroke:none;" transform="translate(0,1740) scale(1,-1)">Idle / departure-time settings</text>
+			<text x="186.774" y="848" style="font-family: Helvetica; font-size: 12px;fill: rgb(32%,38%,44%); stroke:none;" transform="translate(0,1696) scale(1,-1)">Rotate knob: select time; short press: hour / minute</text>
+			<text x="199.78799999999998" y="830" style="font-family: Helvetica; font-size: 12px;fill: rgb(32%,38%,44%); stroke:none;" transform="translate(0,1660) scale(1,-1)">Head touch starts only after NTP time is ready</text>
+			<rect x="55" y="630" width="535" height="105" rx="10" ry="10" style="stroke: rgb(72%,80%,81%); stroke-linecap: butt; stroke-width: 1; fill: rgb(92%,96%,96%); fill-rule: evenodd;"/>
+			<text x="238.036" y="710" style="font-family: Helvetica-Bold; font-size: 16px;fill: rgb(9%,20%,26%); stroke:none;" transform="translate(0,1420) scale(1,-1)">Run preparation tasks</text>
+			<text x="196.464" y="688" style="font-family: Helvetica; font-size: 12px;fill: rgb(32%,38%,44%); stroke:none;" transform="translate(0,1376) scale(1,-1)">GET DRESSED -&gt; PACK BAG -&gt; GET READY</text>
+			<text x="168.07799999999997" y="670" style="font-family: Helvetica; font-size: 12px;fill: rgb(32%,38%,44%); stroke:none;" transform="translate(0,1340) scale(1,-1)">Head touch advances; estimates: 180 / 120 / 120 seconds</text>
+			<rect x="55" y="470" width="535" height="105" rx="10" ry="10" style="stroke: rgb(72%,80%,81%); stroke-linecap: butt; stroke-width: 1; fill: rgb(92%,96%,96%); fill-rule: evenodd;"/>
+			<text x="263.356" y="550" style="font-family: Helvetica-Bold; font-size: 16px;fill: rgb(9%,20%,26%); stroke:none;" transform="translate(0,1100) scale(1,-1)">Final key check</text>
+			<text x="204.612" y="528" style="font-family: Helvetica; font-size: 12px;fill: rgb(32%,38%,44%); stroke:none;" transform="translate(0,1056) scale(1,-1)">Online + keys present: ask user to take keys</text>
+			<text x="155.57999999999998" y="510" style="font-family: Helvetica; font-size: 12px;fill: rgb(32%,38%,44%); stroke:none;" transform="translate(0,1020) scale(1,-1)">Online + unknown: knob confirms possession, then head touch</text>
+			<rect x="55" y="300" width="535" height="105" rx="10" ry="10" style="stroke: rgb(72%,80%,81%); stroke-linecap: butt; stroke-width: 1; fill: rgb(92%,96%,96%); fill-rule: evenodd;"/>
+			<text x="278.5" y="380" style="font-family: Helvetica-Bold; font-size: 16px;fill: rgb(9%,20%,26%); stroke:none;" transform="translate(0,760) scale(1,-1)">Completion</text>
+			<text x="173.1" y="358" style="font-family: Helvetica; font-size: 12px;fill: rgb(32%,38%,44%); stroke:none;" transform="translate(0,716) scale(1,-1)">Online + keys absent, or unknown + manually confirmed</text>
+			<text x="157.926" y="340" style="font-family: Helvetica; font-size: 12px;fill: rgb(32%,38%,44%); stroke:none;" transform="translate(0,680) scale(1,-1)">Head touch accepts -&gt; completion track / light / hat movement</text>
+			<rect x="55" y="140" width="535" height="95" rx="10" ry="10" style="stroke: rgb(72%,80%,81%); stroke-linecap: butt; stroke-width: 1; fill: rgb(92%,96%,96%); fill-rule: evenodd;"/>
+			<text x="270.94" y="210" style="font-family: Helvetica-Bold; font-size: 16px;fill: rgb(9%,20%,26%); stroke:none;" transform="translate(0,420) scale(1,-1)">Return to idle</text>
+			<text x="229.458" y="188" style="font-family: Helvetica; font-size: 12px;fill: rgb(32%,38%,44%); stroke:none;" transform="translate(0,376) scale(1,-1)">Head touch after completion resets</text>
+			<text x="174.102" y="170" style="font-family: Helvetica; font-size: 12px;fill: rgb(32%,38%,44%); stroke:none;" transform="translate(0,340) scale(1,-1)">Short knob press during a task or long press also resets</text>
+			<path d="M 320,790 L 320,735 Z" style="stroke: rgb(12%,48%,51%); stroke-linecap: butt; stroke-width: 2;"/>
+			<polygon points="320 735, 323.9147 743.104, 316.0853 743.104" style="stroke: rgb(12%,48%,51%); stroke-linecap: butt; stroke-width: 1; fill: rgb(12%,48%,51%); fill-rule: evenodd;"/>
+			<path d="M 320,630 L 320,575 Z" style="stroke: rgb(12%,48%,51%); stroke-linecap: butt; stroke-width: 2;"/>
+			<polygon points="320 575, 323.9147 583.104, 316.0853 583.104" style="stroke: rgb(12%,48%,51%); stroke-linecap: butt; stroke-width: 1; fill: rgb(12%,48%,51%); fill-rule: evenodd;"/>
+			<path d="M 320,470 L 320,405 Z" style="stroke: rgb(12%,48%,51%); stroke-linecap: butt; stroke-width: 2;"/>
+			<polygon points="320 405, 323.9147 413.104, 316.0853 413.104" style="stroke: rgb(12%,48%,51%); stroke-linecap: butt; stroke-width: 1; fill: rgb(12%,48%,51%); fill-rule: evenodd;"/>
+			<path d="M 320,300 L 320,235 Z" style="stroke: rgb(12%,48%,51%); stroke-linecap: butt; stroke-width: 2;"/>
+			<polygon points="320 235, 323.9147 243.104, 316.0853 243.104" style="stroke: rgb(12%,48%,51%); stroke-linecap: butt; stroke-width: 1; fill: rgb(12%,48%,51%); fill-rule: evenodd;"/>
+			<rect x="650" y="630" width="300" height="265" rx="10" ry="10" style="stroke: rgb(72%,80%,81%); stroke-linecap: butt; stroke-width: 1; fill: rgb(92%,96%,96%); fill-rule: evenodd;"/>
+			<text x="733.481" y="870" style="font-family: Helvetica-Bold; font-size: 18px;fill: rgb(9%,20%,26%); stroke:none;" transform="translate(0,1740) scale(1,-1)">While tasks run</text>
+			<text x="730.64" y="848" style="font-family: Helvetica; font-size: 12px;fill: rgb(32%,38%,44%); stroke:none;" transform="translate(0,1696) scale(1,-1)">Light reminder: every 10 s</text>
+			<text x="729.974" y="830" style="font-family: Helvetica; font-size: 12px;fill: rgb(32%,38%,44%); stroke:none;" transform="translate(0,1660) scale(1,-1)">Hat movement: every 20 s</text>
+			<text x="721.958" y="812" style="font-family: Helvetica; font-size: 12px;fill: rgb(32%,38%,44%); stroke:none;" transform="translate(0,1624) scale(1,-1)">Audio 1: 30 s before estimate</text>
+			<text x="720.29" y="794" style="font-family: Helvetica; font-size: 12px;fill: rgb(32%,38%,44%); stroke:none;" transform="translate(0,1588) scale(1,-1)">Audio 2: at estimated duration</text>
+			<text x="733.304" y="776" style="font-family: Helvetica; font-size: 12px;fill: rgb(32%,38%,44%); stroke:none;" transform="translate(0,1552) scale(1,-1)">Final audio 3: completion</text>
+			<text x="727.646" y="758" style="font-family: Helvetica; font-size: 12px;fill: rgb(32%,38%,44%); stroke:none;" transform="translate(0,1516) scale(1,-1)">Task timing is non-blocking</text>
+			<rect x="650" y="290" width="300" height="260" rx="10" ry="10" style="stroke: rgb(72%,80%,81%); stroke-linecap: butt; stroke-width: 1; fill: rgb(92%,96%,96%); fill-rule: evenodd;"/>
+			<text x="700.4780000000001" y="525" style="font-family: Helvetica-Bold; font-size: 18px;fill: rgb(9%,20%,26%); stroke:none;" transform="translate(0,1050) scale(1,-1)">Tray runs continuously</text>
+			<text x="711.296" y="503" style="font-family: Helvetica; font-size: 12px;fill: rgb(32%,38%,44%); stroke:none;" transform="translate(0,1006) scale(1,-1)">Read and average pressure ADC</text>
+			<text x="719.306" y="485" style="font-family: Helvetica; font-size: 12px;fill: rgb(32%,38%,44%); stroke:none;" transform="translate(0,970) scale(1,-1)">Hysteresis: ON 300 / OFF 150</text>
+			<text x="738.6320000000001" y="467" style="font-family: Helvetica; font-size: 12px;fill: rgb(32%,38%,44%); stroke:none;" transform="translate(0,934) scale(1,-1)">Stable change: 700 ms</text>
+			<text x="719.294" y="449" style="font-family: Helvetica; font-size: 12px;fill: rgb(32%,38%,44%); stroke:none;" transform="translate(0,898) scale(1,-1)">Send key state every 1000 ms</text>
+			<text x="715.6279999999999" y="431" style="font-family: Helvetica; font-size: 12px;fill: rgb(32%,38%,44%); stroke:none;" transform="translate(0,862) scale(1,-1)">Receive / deduplicate audio IDs</text>
+			<text x="733.988" y="413" style="font-family: Helvetica; font-size: 12px;fill: rgb(32%,38%,44%); stroke:none;" transform="translate(0,826) scale(1,-1)">Drive DFPlayer playback</text>
+			<text x="55" y="80" style="font-family: Times-Roman; font-size: 12px;fill: rgb(32%,38%,44%); stroke:none;" transform="translate(0,160) scale(1,-1)">Offline tray: final completion is blocked until valid status returns (7-second receiver timeout).</text>
+			<text x="55" y="55" style="font-family: Times-Roman; font-size: 12px;fill: rgb(32%,38%,44%); stroke:none;" transform="translate(0,110) scale(1,-1)">The chart summarizes the supplied state machine; optional idle animations and weather are omitted.</text>
+		</g>
+	</g>
+</svg>

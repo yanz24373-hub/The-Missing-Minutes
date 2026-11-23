@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE svg
+  PUBLIC '-//W3C//DTD SVG 1.0//EN'
+  'http://www.w3.org/TR/2001/REC-SVG-20010904/DTD/svg10.dtd'>
+<svg width="1100" height="1030" preserveAspectRatio="xMinYMin meet" viewBox="0 0 1100 1030" xmlns="http://www.w3.org/2000/svg" version="1.0" fill-rule="evenodd" xmlns:xlink="http://www.w3.org/1999/xlink">
+	<title>...</title>
+	<desc>...</desc>
+	<clipPath id="clip">
+		<rect x="0" y="0" width="1100" height="1030"/>
+	</clipPath>
+	<g id="group" transform="scale(1,-1) translate(0,-1030)" style="clip-path: url(#clip)">
+		<g transform="">
+			<text x="35" y="990" style="font-family: Helvetica-Bold; font-size: 24px;fill: rgb(9%,20%,26%); stroke:none;" transform="translate(0,1980) scale(1,-1)">The Missing Minutes | Signal connections</text>
+			<text x="35" y="966" style="font-family: Helvetica; font-size: 12px;fill: rgb(32%,38%,44%); stroke:none;" transform="translate(0,1932) scale(1,-1)">Code-derived GPIO reference; check exact board and peripheral voltages before wiring</text>
+			<rect x="35" y="400" width="230" height="490" rx="10" ry="10" style="stroke: rgb(72%,80%,81%); stroke-linecap: butt; stroke-width: 1; fill: rgb(92%,96%,96%); fill-rule: evenodd;"/>
+			<text x="92.75" y="865" style="font-family: Helvetica-Bold; font-size: 20px;fill: rgb(9%,20%,26%); stroke:none;" transform="translate(0,1730) scale(1,-1)">ESP32 main</text>
+			<text x="105.312" y="843" style="font-family: Helvetica; font-size: 12px;fill: rgb(32%,38%,44%); stroke:none;" transform="translate(0,1686) scale(1,-1)">3.3 V GPIO logic</text>
+			<rect x="350" y="800" width="325" height="83" rx="10" ry="10" style="stroke: rgb(72%,80%,81%); stroke-linecap: butt; stroke-width: 1; fill: rgb(92%,96%,96%); fill-rule: evenodd;"/>
+			<text x="470.4025" y="858" style="font-family: Helvetica-Bold; font-size: 15px;fill: rgb(9%,20%,26%); stroke:none;" transform="translate(0,1716) scale(1,-1)">ST7735 TFT</text>
+			<text x="448.69" y="836" style="font-family: Helvetica; font-size: 12px;fill: rgb(32%,38%,44%); stroke:none;" transform="translate(0,1672) scale(1,-1)">CS 27 | DC 26 | RST 25</text>
+			<text x="459.916" y="818" style="font-family: Helvetica; font-size: 12px;fill: rgb(32%,38%,44%); stroke:none;" transform="translate(0,1636) scale(1,-1)">MOSI 23 | SCLK 18</text>
+			<path d="M 265,841 L 350,841 Z" style="stroke: rgb(12%,48%,51%); stroke-linecap: butt; stroke-width: 2;"/>
+			<polygon points="350 841, 341.896 844.9147, 341.896 837.0853" style="stroke: rgb(12%,48%,51%); stroke-linecap: butt; stroke-width: 1; fill: rgb(12%,48%,51%); fill-rule: evenodd;"/>
+			<rect x="350" y="700" width="325" height="83" rx="10" ry="10" style="stroke: rgb(72%,80%,81%); stroke-linecap: butt; stroke-width: 1; fill: rgb(92%,96%,96%); fill-rule: evenodd;"/>
+			<text x="457.4875" y="758" style="font-family: Helvetica-Bold; font-size: 15px;fill: rgb(9%,20%,26%); stroke:none;" transform="translate(0,1516) scale(1,-1)">Rotary encoder</text>
+			<text x="448.354" y="736" style="font-family: Helvetica; font-size: 12px;fill: rgb(32%,38%,44%); stroke:none;" transform="translate(0,1472) scale(1,-1)">CLK 32 | DT 33 | SW 13</text>
+			<text x="440.8" y="718" style="font-family: Helvetica; font-size: 12px;fill: rgb(32%,38%,44%); stroke:none;" transform="translate(0,1436) scale(1,-1)">Inputs use internal pull-ups</text>
+			<path d="M 350,741 L 265,741 Z" style="stroke: rgb(12%,48%,51%); stroke-linecap: butt; stroke-width: 2;"/>
+			<polygon points="265 741, 273.104 737.0853, 273.104 744.9147" style="stroke: rgb(12%,48%,51%); stroke-linecap: butt; stroke-width: 1; fill: rgb(12%,48%,51%); fill-rule: evenodd;"/>
+			<rect x="350" y="600" width="325" height="83" rx="10" ry="10" style="stroke: rgb(72%,80%,81%); stroke-linecap: butt; stroke-width: 1; fill: rgb(92%,96%,96%); fill-rule: evenodd;"/>
+			<text x="444.5725" y="658" style="font-family: Helvetica-Bold; font-size: 15px;fill: rgb(9%,20%,26%); stroke:none;" transform="translate(0,1316) scale(1,-1)">Head-touch sensor</text>
+			<text x="469.318" y="636" style="font-family: Helvetica; font-size: 12px;fill: rgb(32%,38%,44%); stroke:none;" transform="translate(0,1272) scale(1,-1)">OUT -&gt; GPIO14</text>
+			<text x="429.142" y="618" style="font-family: Helvetica; font-size: 12px;fill: rgb(32%,38%,44%); stroke:none;" transform="translate(0,1236) scale(1,-1)">Active HIGH; internal pull-down</text>
+			<path d="M 350,641 L 265,641 Z" style="stroke: rgb(12%,48%,51%); stroke-linecap: butt; stroke-width: 2;"/>
+			<polygon points="265 641, 273.104 637.0853, 273.104 644.9147" style="stroke: rgb(12%,48%,51%); stroke-linecap: butt; stroke-width: 1; fill: rgb(12%,48%,51%); fill-rule: evenodd;"/>
+			<rect x="350" y="500" width="325" height="83" rx="10" ry="10" style="stroke: rgb(72%,80%,81%); stroke-linecap: butt; stroke-width: 1; fill: rgb(92%,96%,96%); fill-rule: evenodd;"/>
+			<text x="478.3225" y="558" style="font-family: Helvetica-Bold; font-size: 15px;fill: rgb(9%,20%,26%); stroke:none;" transform="translate(0,1116) scale(1,-1)">Hat servo</text>
+			<text x="465.31" y="536" style="font-family: Helvetica; font-size: 12px;fill: rgb(32%,38%,44%); stroke:none;" transform="translate(0,1072) scale(1,-1)">Signal &lt;- GPIO16</text>
+			<text x="446.488" y="518" style="font-family: Helvetica; font-size: 12px;fill: rgb(32%,38%,44%); stroke:none;" transform="translate(0,1036) scale(1,-1)">50 Hz PWM; verify travel</text>
+			<path d="M 265,541 L 350,541 Z" style="stroke: rgb(12%,48%,51%); stroke-linecap: butt; stroke-width: 2;"/>
+			<polygon points="350 541, 341.896 544.9147, 341.896 537.0853" style="stroke: rgb(12%,48%,51%); stroke-linecap: butt; stroke-width: 1; fill: rgb(12%,48%,51%); fill-rule: evenodd;"/>
+			<rect x="350" y="400" width="325" height="83" rx="10" ry="10" style="stroke: rgb(72%,80%,81%); stroke-linecap: butt; stroke-width: 1; fill: rgb(92%,96%,96%); fill-rule: evenodd;"/>
+			<text x="452.0575" y="458" style="font-family: Helvetica-Bold; font-size: 15px;fill: rgb(9%,20%,26%); stroke:none;" transform="translate(0,916) scale(1,-1)">33 WS2812 LEDs</text>
+			<text x="471.652" y="436" style="font-family: Helvetica; font-size: 12px;fill: rgb(32%,38%,44%); stroke:none;" transform="translate(0,872) scale(1,-1)">DIN &lt;- GPIO17</text>
+			<text x="472.486" y="418" style="font-family: Helvetica; font-size: 12px;fill: rgb(32%,38%,44%); stroke:none;" transform="translate(0,836) scale(1,-1)">GRB / 800 kHz</text>
+			<path d="M 265,441 L 350,441 Z" style="stroke: rgb(12%,48%,51%); stroke-linecap: butt; stroke-width: 2;"/>
+			<polygon points="350 441, 341.896 444.9147, 341.896 437.0853" style="stroke: rgb(12%,48%,51%); stroke-linecap: butt; stroke-width: 1; fill: rgb(12%,48%,51%); fill-rule: evenodd;"/>
+			<rect x="35" y="100" width="230" height="230" rx="10" ry="10" style="stroke: rgb(72%,80%,81%); stroke-linecap: butt; stroke-width: 1; fill: rgb(92%,96%,96%); fill-rule: evenodd;"/>
+			<text x="86.63" y="305" style="font-family: Helvetica-Bold; font-size: 20px;fill: rgb(9%,20%,26%); stroke:none;" transform="translate(0,610) scale(1,-1)">ESP8266 tray</text>
+			<text x="94.98599999999999" y="283" style="font-family: Helvetica; font-size: 12px;fill: rgb(32%,38%,44%); stroke:none;" transform="translate(0,566) scale(1,-1)">NodeMCU pin labels</text>
+			<text x="102.97800000000001" y="265" style="font-family: Helvetica; font-size: 12px;fill: rgb(32%,38%,44%); stroke:none;" transform="translate(0,530) scale(1,-1)">A0 pressure input</text>
+			<text x="79.29599999999999" y="247" style="font-family: Helvetica; font-size: 12px;fill: rgb(32%,38%,44%); stroke:none;" transform="translate(0,494) scale(1,-1)">D5=GPIO14 / D6=GPIO12</text>
+			<rect x="350" y="80" width="325" height="95" rx="10" ry="10" style="stroke: rgb(72%,80%,81%); stroke-linecap: butt; stroke-width: 1; fill: rgb(92%,96%,96%); fill-rule: evenodd;"/>
+			<text x="420.3775" y="150" style="font-family: Helvetica-Bold; font-size: 15px;fill: rgb(9%,20%,26%); stroke:none;" transform="translate(0,300) scale(1,-1)">Pressure sensor interface</text>
+			<text x="456.64" y="128" style="font-family: Helvetica; font-size: 12px;fill: rgb(32%,38%,44%); stroke:none;" transform="translate(0,256) scale(1,-1)">Analogue OUT -&gt; A0</text>
+			<text x="421.462" y="110" style="font-family: Helvetica; font-size: 12px;fill: rgb(32%,38%,44%); stroke:none;" transform="translate(0,220) scale(1,-1)">ADC limit depends on exact board</text>
+			<path d="M 350,127 L 265,127 Z" style="stroke: rgb(12%,48%,51%); stroke-linecap: butt; stroke-width: 2;"/>
+			<polygon points="265 127, 273.104 123.0853, 273.104 130.9147" style="stroke: rgb(12%,48%,51%); stroke-linecap: butt; stroke-width: 1; fill: rgb(12%,48%,51%); fill-rule: evenodd;"/>
+			<rect x="350" y="230" width="325" height="140" rx="10" ry="10" style="stroke: rgb(72%,80%,81%); stroke-linecap: butt; stroke-width: 1; fill: rgb(92%,96%,96%); fill-rule: evenodd;"/>
+			<text x="452.983" y="345" style="font-family: Helvetica-Bold; font-size: 18px;fill: rgb(9%,20%,26%); stroke:none;" transform="translate(0,690) scale(1,-1)">DFPlayer Mini</text>
+			<text x="426.964" y="323" style="font-family: Helvetica; font-size: 12px;fill: rgb(32%,38%,44%); stroke:none;" transform="translate(0,646) scale(1,-1)">TX -&gt; D5 / GPIO14 (level adapt)</text>
+			<text x="434.308" y="305" style="font-family: Helvetica; font-size: 12px;fill: rgb(32%,38%,44%); stroke:none;" transform="translate(0,610) scale(1,-1)">D6 / GPIO12 -&gt; RX (1 kOhm)</text>
+			<text x="441.13" y="287" style="font-family: Helvetica; font-size: 12px;fill: rgb(32%,38%,44%); stroke:none;" transform="translate(0,574) scale(1,-1)">Software serial: 9600 baud</text>
+			<text x="433.13800000000003" y="269" style="font-family: Helvetica; font-size: 12px;fill: rgb(32%,38%,44%); stroke:none;" transform="translate(0,538) scale(1,-1)">Regulated 5 V; common GND</text>
+			<path d="M 265,280 L 350,280 Z" style="stroke: rgb(12%,48%,51%); stroke-linecap: butt; stroke-width: 2;"/>
+			<polygon points="350 280, 341.896 283.9147, 341.896 276.0853" style="stroke: rgb(12%,48%,51%); stroke-linecap: butt; stroke-width: 1; fill: rgb(12%,48%,51%); fill-rule: evenodd;"/>
+			<rect x="750" y="250" width="310" height="100" rx="10" ry="10" style="stroke: rgb(72%,80%,81%); stroke-linecap: butt; stroke-width: 1; fill: rgb(92%,96%,96%); fill-rule: evenodd;"/>
+			<text x="873.872" y="325" style="font-family: Helvetica-Bold; font-size: 16px;fill: rgb(9%,20%,26%); stroke:none;" transform="translate(0,650) scale(1,-1)">Speaker</text>
+			<text x="840.968" y="303" style="font-family: Helvetica; font-size: 12px;fill: rgb(32%,38%,44%); stroke:none;" transform="translate(0,606) scale(1,-1)">Across SPK1 and SPK2</text>
+			<text x="806.954" y="285" style="font-family: Helvetica; font-size: 12px;fill: rgb(32%,38%,44%); stroke:none;" transform="translate(0,570) scale(1,-1)">Do not connect speaker lead to GND</text>
+			<path d="M 675,300 L 750,300 Z" style="stroke: rgb(12%,48%,51%); stroke-linecap: butt; stroke-width: 2;"/>
+			<polygon points="750 300, 741.896 303.9147, 741.896 296.0853" style="stroke: rgb(12%,48%,51%); stroke-linecap: butt; stroke-width: 1; fill: rgb(12%,48%,51%); fill-rule: evenodd;"/>
+			<rect x="750" y="80" width="310" height="130" rx="10" ry="10" style="stroke: rgb(72%,80%,81%); stroke-linecap: butt; stroke-width: 1; fill: rgb(92%,96%,96%); fill-rule: evenodd;"/>
+			<text x="830.975" y="185" style="font-family: Helvetica-Bold; font-size: 18px;fill: rgb(9%,20%,26%); stroke:none;" transform="translate(0,370) scale(1,-1)">Other power rails</text>
+			<text x="813.626" y="163" style="font-family: Helvetica; font-size: 12px;fill: rgb(32%,38%,44%); stroke:none;" transform="translate(0,326) scale(1,-1)">Servo / LED: rated external supply</text>
+			<text x="807.644" y="145" style="font-family: Helvetica; font-size: 12px;fill: rgb(32%,38%,44%); stroke:none;" transform="translate(0,290) scale(1,-1)">Controller / peripheral common GND</text>
+			<text x="819.9739999999999" y="127" style="font-family: Helvetica; font-size: 12px;fill: rgb(32%,38%,44%); stroke:none;" transform="translate(0,254) scale(1,-1)">TFT / board VIN: verify modules</text>
+			<text x="35" y="38" style="font-family: Helvetica; font-size: 12px;fill: rgb(32%,38%,44%); stroke:none;" transform="translate(0,76) scale(1,-1)">Signal reference, not an as-built schematic. Regulator topology and module revisions are not documented.</text>
+		</g>
+	</g>
+</svg>

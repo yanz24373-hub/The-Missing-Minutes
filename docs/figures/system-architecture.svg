@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE svg
+  PUBLIC '-//W3C//DTD SVG 1.0//EN'
+  'http://www.w3.org/TR/2001/REC-SVG-20010904/DTD/svg10.dtd'>
+<svg width="1000" height="780" preserveAspectRatio="xMinYMin meet" viewBox="0 0 1000 780" xmlns="http://www.w3.org/2000/svg" version="1.0" fill-rule="evenodd" xmlns:xlink="http://www.w3.org/1999/xlink">
+	<title>...</title>
+	<desc>...</desc>
+	<clipPath id="clip">
+		<rect x="0" y="0" width="1000" height="780"/>
+	</clipPath>
+	<g id="group" transform="scale(1,-1) translate(0,-780)" style="clip-path: url(#clip)">
+		<g transform="">
+			<text x="35" y="740" style="font-family: Helvetica-Bold; font-size: 24px;fill: rgb(9%,20%,26%); stroke:none;" transform="translate(0,1480) scale(1,-1)">The Missing Minutes | System architecture</text>
+			<text x="35" y="716" style="font-family: Helvetica; font-size: 12px;fill: rgb(32%,38%,44%); stroke:none;" transform="translate(0,1432) scale(1,-1)">Module responsibilities and data paths, derived from the supplied firmware</text>
+			<rect x="325" y="560" width="350" height="100" rx="10" ry="10" style="stroke: rgb(72%,80%,81%); stroke-linecap: butt; stroke-width: 1; fill: rgb(92%,96%,96%); fill-rule: evenodd;"/>
+			<text x="427.52" y="635" style="font-family: Helvetica-Bold; font-size: 16px;fill: rgb(9%,20%,26%); stroke:none;" transform="translate(0,1270) scale(1,-1)">ESP32 | Main robot</text>
+			<text x="393.95" y="613" style="font-family: Helvetica; font-size: 12px;fill: rgb(32%,38%,44%); stroke:none;" transform="translate(0,1226) scale(1,-1)">Task state, departure time and interface</text>
+			<text x="408.626" y="595" style="font-family: Helvetica; font-size: 12px;fill: rgb(32%,38%,44%); stroke:none;" transform="translate(0,1190) scale(1,-1)">Timed light / motion / audio events</text>
+			<rect x="35" y="550" width="245" height="90" rx="10" ry="10" style="stroke: rgb(72%,80%,81%); stroke-linecap: butt; stroke-width: 1; fill: rgb(92%,96%,96%); fill-rule: evenodd;"/>
+			<text x="112.596" y="615" style="font-family: Helvetica-Bold; font-size: 16px;fill: rgb(9%,20%,26%); stroke:none;" transform="translate(0,1230) scale(1,-1)">ST7735 TFT</text>
+			<text x="95.80799999999999" y="593" style="font-family: Helvetica; font-size: 12px;fill: rgb(32%,38%,44%); stroke:none;" transform="translate(0,1186) scale(1,-1)">Task / time / idle pages</text>
+			<text x="122.484" y="575" style="font-family: Helvetica; font-size: 12px;fill: rgb(32%,38%,44%); stroke:none;" transform="translate(0,1150) scale(1,-1)">Software SPI</text>
+			<rect x="35" y="415" width="245" height="90" rx="10" ry="10" style="stroke: rgb(72%,80%,81%); stroke-linecap: butt; stroke-width: 1; fill: rgb(92%,96%,96%); fill-rule: evenodd;"/>
+			<text x="98.82" y="480" style="font-family: Helvetica-Bold; font-size: 16px;fill: rgb(9%,20%,26%); stroke:none;" transform="translate(0,960) scale(1,-1)">Rotary encoder</text>
+			<text x="95.148" y="458" style="font-family: Helvetica; font-size: 12px;fill: rgb(32%,38%,44%); stroke:none;" transform="translate(0,916) scale(1,-1)">Departure-time settings</text>
+			<text x="96.48" y="440" style="font-family: Helvetica; font-size: 12px;fill: rgb(32%,38%,44%); stroke:none;" transform="translate(0,880) scale(1,-1)">CLK / DT / push switch</text>
+			<rect x="35" y="280" width="245" height="90" rx="10" ry="10" style="stroke: rgb(72%,80%,81%); stroke-linecap: butt; stroke-width: 1; fill: rgb(92%,96%,96%); fill-rule: evenodd;"/>
+			<text x="85.044" y="345" style="font-family: Helvetica-Bold; font-size: 16px;fill: rgb(9%,20%,26%); stroke:none;" transform="translate(0,690) scale(1,-1)">Head-touch sensor</text>
+			<text x="92.148" y="323" style="font-family: Helvetica; font-size: 12px;fill: rgb(32%,38%,44%); stroke:none;" transform="translate(0,646) scale(1,-1)">Active-HIGH digital input</text>
+			<text x="94.134" y="305" style="font-family: Helvetica; font-size: 12px;fill: rgb(32%,38%,44%); stroke:none;" transform="translate(0,610) scale(1,-1)">Acknowledge / advance</text>
+			<rect x="720" y="550" width="245" height="90" rx="10" ry="10" style="stroke: rgb(72%,80%,81%); stroke-linecap: butt; stroke-width: 1; fill: rgb(92%,96%,96%); fill-rule: evenodd;"/>
+			<text x="806.044" y="615" style="font-family: Helvetica-Bold; font-size: 16px;fill: rgb(9%,20%,26%); stroke:none;" transform="translate(0,1230) scale(1,-1)">Hat servo</text>
+			<text x="798.16" y="593" style="font-family: Helvetica; font-size: 12px;fill: rgb(32%,38%,44%); stroke:none;" transform="translate(0,1186) scale(1,-1)">PWM movement</text>
+			<text x="820.822" y="575" style="font-family: Helvetica; font-size: 12px;fill: rgb(32%,38%,44%); stroke:none;" transform="translate(0,1150) scale(1,-1)">GPIO16</text>
+			<rect x="720" y="415" width="245" height="90" rx="10" ry="10" style="stroke: rgb(72%,80%,81%); stroke-linecap: butt; stroke-width: 1; fill: rgb(92%,96%,96%); fill-rule: evenodd;"/>
+			<text x="789.148" y="480" style="font-family: Helvetica-Bold; font-size: 16px;fill: rgb(9%,20%,26%); stroke:none;" transform="translate(0,960) scale(1,-1)">WS2812 LEDs</text>
+			<text x="779.134" y="458" style="font-family: Helvetica; font-size: 12px;fill: rgb(32%,38%,44%); stroke:none;" transform="translate(0,916) scale(1,-1)">33 LEDs; light feedback</text>
+			<text x="820.822" y="440" style="font-family: Helvetica; font-size: 12px;fill: rgb(32%,38%,44%); stroke:none;" transform="translate(0,880) scale(1,-1)">GPIO17</text>
+			<path d="M 325,607 L 280,607 Z" style="stroke: rgb(12%,48%,51%); stroke-linecap: butt; stroke-width: 2;"/>
+			<polygon points="280 607, 288.104 603.0853, 288.104 610.9147" style="stroke: rgb(12%,48%,51%); stroke-linecap: butt; stroke-width: 1; fill: rgb(12%,48%,51%); fill-rule: evenodd;"/>
+			<path d="M 280,460 L 325,580 Z" style="stroke: rgb(12%,48%,51%); stroke-linecap: butt; stroke-width: 2;"/>
+			<polygon points="325 580, 318.489 573.7865, 325.8199 571.0374" style="stroke: rgb(12%,48%,51%); stroke-linecap: butt; stroke-width: 1; fill: rgb(12%,48%,51%); fill-rule: evenodd;"/>
+			<path d="M 280,325 L 325,570 Z" style="stroke: rgb(12%,48%,51%); stroke-linecap: butt; stroke-width: 2;"/>
+			<polygon points="325 570, 319.6857 562.7365, 327.3863 561.3221" style="stroke: rgb(12%,48%,51%); stroke-linecap: butt; stroke-width: 1; fill: rgb(12%,48%,51%); fill-rule: evenodd;"/>
+			<path d="M 675,607 L 720,607 Z" style="stroke: rgb(12%,48%,51%); stroke-linecap: butt; stroke-width: 2;"/>
+			<polygon points="720 607, 711.896 610.9147, 711.896 603.0853" style="stroke: rgb(12%,48%,51%); stroke-linecap: butt; stroke-width: 1; fill: rgb(12%,48%,51%); fill-rule: evenodd;"/>
+			<path d="M 675,580 L 720,460 Z" style="stroke: rgb(12%,48%,51%); stroke-linecap: butt; stroke-width: 2;"/>
+			<polygon points="720 460, 720.8199 468.9626, 713.489 466.2135" style="stroke: rgb(12%,48%,51%); stroke-linecap: butt; stroke-width: 1; fill: rgb(12%,48%,51%); fill-rule: evenodd;"/>
+			<rect x="325" y="365" width="350" height="125" rx="10" ry="10" style="stroke: rgb(72%,80%,81%); stroke-linecap: butt; stroke-width: 1; fill: rgb(92%,96%,96%); fill-rule: evenodd;"/>
+			<text x="394.144" y="465" style="font-family: Helvetica-Bold; font-size: 16px;fill: rgb(9%,20%,26%); stroke:none;" transform="translate(0,930) scale(1,-1)">ESP8266 | Wireless key tray</text>
+			<text x="399.28999999999996" y="443" style="font-family: Helvetica; font-size: 12px;fill: rgb(32%,38%,44%); stroke:none;" transform="translate(0,886) scale(1,-1)">Pressure filtering and presence status</text>
+			<text x="419.978" y="425" style="font-family: Helvetica; font-size: 12px;fill: rgb(32%,38%,44%); stroke:none;" transform="translate(0,850) scale(1,-1)">UDP audio command receiver</text>
+			<text x="439.322" y="407" style="font-family: Helvetica; font-size: 12px;fill: rgb(32%,38%,44%); stroke:none;" transform="translate(0,814) scale(1,-1)">DFPlayer serial control</text>
+			<path d="M 430,490 L 430,560 Z" style="stroke: rgb(12%,48%,51%); stroke-linecap: butt; stroke-width: 2;"/>
+			<polygon points="430 560, 426.0853 551.896, 433.9147 551.896" style="stroke: rgb(12%,48%,51%); stroke-linecap: butt; stroke-width: 1; fill: rgb(12%,48%,51%); fill-rule: evenodd;"/>
+			<text x="438.0" y="533.0" style="font-family: Helvetica; font-size: 11px;fill: rgb(32%,38%,44%); stroke:none;" transform="translate(0,1066) scale(1,-1)">Key state | UDP 4210</text>
+			<path d="M 580,560 L 580,490 Z" style="stroke: rgb(12%,48%,51%); stroke-linecap: butt; stroke-width: 2;"/>
+			<polygon points="580 490, 583.9147 498.104, 576.0853 498.104" style="stroke: rgb(12%,48%,51%); stroke-linecap: butt; stroke-width: 1; fill: rgb(12%,48%,51%); fill-rule: evenodd;"/>
+			<text x="588.0" y="533.0" style="font-family: Helvetica; font-size: 11px;fill: rgb(32%,38%,44%); stroke:none;" transform="translate(0,1066) scale(1,-1)">Audio | UDP 4211</text>
+			<rect x="35" y="125" width="245" height="90" rx="10" ry="10" style="stroke: rgb(72%,80%,81%); stroke-linecap: butt; stroke-width: 1; fill: rgb(92%,96%,96%); fill-rule: evenodd;"/>
+			<text x="94.804" y="190" style="font-family: Helvetica-Bold; font-size: 16px;fill: rgb(9%,20%,26%); stroke:none;" transform="translate(0,380) scale(1,-1)">Pressure sensor</text>
+			<text x="67.458" y="168" style="font-family: Helvetica; font-size: 12px;fill: rgb(32%,38%,44%); stroke:none;" transform="translate(0,336) scale(1,-1)">Analogue presence measurement</text>
+			<text x="88.302" y="150" style="font-family: Helvetica; font-size: 12px;fill: rgb(32%,38%,44%); stroke:none;" transform="translate(0,300) scale(1,-1)">A0; threshold + hysteresis</text>
+			<path d="M 280,170 L 325,400 Z" style="stroke: rgb(12%,48%,51%); stroke-linecap: butt; stroke-width: 2;"/>
+			<polygon points="325 400, 319.6021 392.7984, 327.2858 391.2951" style="stroke: rgb(12%,48%,51%); stroke-linecap: butt; stroke-width: 1; fill: rgb(12%,48%,51%); fill-rule: evenodd;"/>
+			<rect x="365" y="160" width="270" height="90" rx="10" ry="10" style="stroke: rgb(72%,80%,81%); stroke-linecap: butt; stroke-width: 1; fill: rgb(92%,96%,96%); fill-rule: evenodd;"/>
+			<text x="447.096" y="225" style="font-family: Helvetica-Bold; font-size: 16px;fill: rgb(9%,20%,26%); stroke:none;" transform="translate(0,450) scale(1,-1)">DFPlayer Mini</text>
+			<text x="437.972" y="203" style="font-family: Helvetica; font-size: 12px;fill: rgb(32%,38%,44%); stroke:none;" transform="translate(0,406) scale(1,-1)">Track 1 / 2 / 3 playback</text>
+			<text x="430.97" y="185" style="font-family: Helvetica; font-size: 12px;fill: rgb(32%,38%,44%); stroke:none;" transform="translate(0,370) scale(1,-1)">9600-baud software serial</text>
+			<path d="M 500,365 L 500,250 Z" style="stroke: rgb(12%,48%,51%); stroke-linecap: butt; stroke-width: 2;"/>
+			<polygon points="500 250, 503.9147 258.104, 496.0853 258.104" style="stroke: rgb(12%,48%,51%); stroke-linecap: butt; stroke-width: 1; fill: rgb(12%,48%,51%); fill-rule: evenodd;"/>
+			<text x="508.0" y="315.5" style="font-family: Helvetica; font-size: 11px;fill: rgb(32%,38%,44%); stroke:none;" transform="translate(0,631) scale(1,-1)">D5 RX / D6 TX</text>
+			<rect x="720" y="160" width="245" height="90" rx="10" ry="10" style="stroke: rgb(72%,80%,81%); stroke-linecap: butt; stroke-width: 1; fill: rgb(92%,96%,96%); fill-rule: evenodd;"/>
+			<text x="811.372" y="225" style="font-family: Helvetica-Bold; font-size: 16px;fill: rgb(9%,20%,26%); stroke:none;" transform="translate(0,450) scale(1,-1)">Speaker</text>
+			<text x="780.142" y="203" style="font-family: Helvetica; font-size: 12px;fill: rgb(32%,38%,44%); stroke:none;" transform="translate(0,406) scale(1,-1)">DFPlayer SPK1 / SPK2</text>
+			<text x="776.14" y="185" style="font-family: Helvetica; font-size: 12px;fill: rgb(32%,38%,44%); stroke:none;" transform="translate(0,370) scale(1,-1)">8-ohm in supplied sketch</text>
+			<path d="M 635,205 L 720,205 Z" style="stroke: rgb(12%,48%,51%); stroke-linecap: butt; stroke-width: 2;"/>
+			<polygon points="720 205, 711.896 208.9147, 711.896 201.0853" style="stroke: rgb(12%,48%,51%); stroke-linecap: butt; stroke-width: 1; fill: rgb(12%,48%,51%); fill-rule: evenodd;"/>
+			<rect x="720" y="280" width="245" height="90" rx="10" ry="10" style="stroke: rgb(72%,80%,81%); stroke-linecap: butt; stroke-width: 1; fill: rgb(92%,96%,96%); fill-rule: evenodd;"/>
+			<text x="778.9159999999999" y="345" style="font-family: Helvetica-Bold; font-size: 16px;fill: rgb(9%,20%,26%); stroke:none;" transform="translate(0,690) scale(1,-1)">Internet services</text>
+			<text x="768.472" y="323" style="font-family: Helvetica; font-size: 12px;fill: rgb(32%,38%,44%); stroke:none;" transform="translate(0,646) scale(1,-1)">NTP time / optional weather</text>
+			<text x="787.498" y="305" style="font-family: Helvetica; font-size: 12px;fill: rgb(32%,38%,44%); stroke:none;" transform="translate(0,610) scale(1,-1)">Main controller Wi-Fi</text>
+			<path d="M 720,325 L 675,570 Z" style="stroke: rgb(12%,48%,51%); stroke-linecap: butt; stroke-width: 2;"/>
+			<polygon points="675 570, 672.6137 561.3221, 680.3143 562.7365" style="stroke: rgb(12%,48%,51%); stroke-linecap: butt; stroke-width: 1; fill: rgb(12%,48%,51%); fill-rule: evenodd;"/>
+			<text x="35" y="45" style="font-family: Times-Roman; font-size: 12px;fill: rgb(32%,38%,44%); stroke:none;" transform="translate(0,90) scale(1,-1)">Wi-Fi joins both controllers to the same network. Lines show interfaces, not power wiring.</text>
+		</g>
+	</g>
+</svg>

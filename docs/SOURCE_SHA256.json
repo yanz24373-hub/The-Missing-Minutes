@@ -1,0 +1,13 @@
+{
+  "media/robot1.png": "3f8f2d7494d839e2ce666b37bcdd04a55cbfae9cdb9b10dcd6cf3a5ad8b911f1",
+  "media/robot2.png": "e412acb851607143afdd31050615c2bfa5271360cfc7efaa8520c3264057ae81",
+  "firmware/ESP32_Main/ESP32_Main.ino": "913efab4ca4a72fa6b2e81442b5fd7aa1878815a18e0b90b99e09a5e26105b62",
+  "firmware/ESP8266_Tray/ESP8266_Tray.ino": "103e273b0a3481d97a0e5691be8f990547b10629005598a7bc4d771a6ea327a1",
+  "models/cad/shybo.3dm": "80d71578a7a9c42236eedc929ffb3c642011b894aff27d06ce861fc1ae92392e",
+  "models/stl/axis.stl": "408d3307cb64e6dd5f288556de13b7378874f1ce06857d8fa6d1b0542af5432e",
+  "models/stl/Back shell.stl": "1c2aaff2cca02c89bab0e413efe7a1859423d1b03c565767f3651d2dbe0066a9",
+  "models/stl/Base.stl": "478b85418b4aa98dd181154f6e3e46487654b29abe5ac15829abe98d1ac0ee41",
+  "models/stl/frontshell.stl": "27606a911c46d61a7021520059b911da9aa007763fea0d73f47a7a2a0013f927",
+  "models/stl/hat.stl": "4c4517cea2d3fdb12e43a0aaaedfc0b2548130fc7b39faddbcc372c81a75382d",
+  "models/stl/Servo Docking.stl": "3747c4751d5d9e23911c0856cb33e886ef85b8743f056868583866ef4e0085bb"
+}
