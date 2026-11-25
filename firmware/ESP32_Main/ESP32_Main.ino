@@ -1,3 +1,4 @@
+// Main robot: task timing, display, controls and wireless audio.
 #include <Arduino.h>
 #include <WiFi.h>
 #include <WiFiUdp.h>
@@ -9,13 +10,7 @@
 #include <Adafruit_NeoPixel.h>
 #include <ESP32Servo.h>
 
-// =======================================================
-// THE MISSING MINUTES - ESP32 MAIN FINAL (V11 + AUDIO EVENTS)
-// Preserves V11 display, controls, reminders, Wi-Fi and key-tray protocol.
-// Audio commands are sent to the ESP8266 key tray, which drives a DFPlayer Mini.
-// =======================================================
-
-#include "wifi_secrets.h"  // Define WIFI_NAME and WIFI_PASS locally; do not publish credentials.
+#include "wifi_secrets.h"
 const char* TIMEZONE = "GMT0BST,M3.5.0/1,M10.5.0/2";
 
 #define TFT_CS   27
@@ -46,16 +41,12 @@ WiFiUDP trayUdp;
 #define GREEN   0x3666
 #define GREY    0x9CF3
 
-// The tray sends presence messages to port 4210 on the main robot.
-// The main robot sends short audio event commands to port 4211 on the tray.
 const uint16_t TRAY_PORT = 4210;
 const uint16_t AUDIO_COMMAND_PORT = 4211;
 const unsigned long AUDIO_RETRY_MS = 90;
-const unsigned long AUDIO_COMMAND_TTL_MS = 10000;  // Drop stale events after 10 seconds.
+const unsigned long AUDIO_COMMAND_TTL_MS = 10000;  
 const int AUDIO_SEND_COPIES = 3;
 
-// 1 = 30-second warning, 2 = task overdue, 3 = routine completed.
-// Audio is triggered once per task event and once at final completion.
 const uint8_t AUDIO_WARNING_TRACK = 1;
 const uint8_t AUDIO_OVERDUE_TRACK = 2;
 const uint8_t AUDIO_COMPLETE_TRACK = 3;
@@ -63,7 +54,7 @@ const unsigned long TRAY_TIMEOUT = 7000;
 const unsigned long LED_REMINDER_MS = 10000;
 const unsigned long HEAD_REMINDER_MS = 20000;
 const int SERVO_CENTER = 90;
-const int SERVO_RANGE = 30; // 60 -> 120 -> 90 degrees
+const int SERVO_RANGE = 30; 
 const unsigned long SERVO_STEP_MS = 25;
 
 const float WEATHER_LAT = 51.55f;
@@ -72,12 +63,13 @@ const float WEATHER_LON = -0.22f;
 struct TaskStep {
   const char* line1;
   const char* line2;
-  uint16_t estimatedSec;
+  uint16_t weight;
 };
+
 const TaskStep TASKS[] = {
-  {"GET", "DRESSED", 180},
-  {"PACK", "BAG", 120},
-  {"GET", "READY", 120}
+  {"GET", "DRESSED", 3},
+  {"PACK", "BAG", 2},
+  {"GET", "READY", 2}
 };
 const int TASK_COUNT = sizeof(TASKS) / sizeof(TASKS[0]);
 
@@ -100,6 +92,7 @@ int targetMinute = 0;
 time_t departureEpoch = 0;
 bool departureAlerted = false;
 unsigned long taskStartedAt = 0;
+unsigned long currentTaskBudgetSec = 0;
 
 bool trayPresent = false;
 bool trayEverReceived = false;
@@ -108,12 +101,9 @@ bool manualKeyConfirmed = false;
 unsigned long lastTrayPacket = 0;
 bool keyDirty = false;
 
-// The ESP8266's source address is learned from its existing key-state packets.
-// This removes the need to hard-code the tray's IP address on the ESP32.
 IPAddress lastTraySenderIP(0, 0, 0, 0);
 bool trayAddressKnown = false;
 
-// Audio trigger latches prevent a track from being requested every loop.
 bool warningSoundPlayed = false;
 bool overdueSoundPlayed = false;
 uint32_t nextAudioCommandId = 1;
@@ -174,14 +164,9 @@ unsigned long fishPhaseAt = 0;
 unsigned long fishFrameAt = 0;
 unsigned long fishHoldUntil = 0;
 
-// Weather preview commands: 1=SUN, 2=CLOUDY, 3=RAIN, 0=cancel.
-// Demo changes ONLY the visible weather page, never real weather data.
-int weatherDemo = 0;
-unsigned long weatherDemoUntil = 0;
 unsigned long weatherAnimAt = 0;
 int weatherFrame = 0;
 
-// Display caches: unchanged text is never repainted.
 String cachedTaskTime = "";
 String cachedKeyState = "";
 
@@ -216,7 +201,6 @@ void drawClockSmall() {
   tft.print(b);
 }
 
-// ---------------- SERVO ----------------
 void swingHead() {
   if (servoMoving) return;
   servoMoving = true;
@@ -252,7 +236,6 @@ void updateServo() {
   }
 }
 
-// ---------------- LED ----------------
 void ledClear() { strip.clear(); strip.show(); }
 void ledStop() { ledMode = LED_OFF; ledClear(); }
 void ledAll() { strip.fill(strip.Color(90, 125, 100)); strip.show(); }
@@ -298,7 +281,6 @@ void updateLed() {
   }
 }
 
-// ---------------- EYES ----------------
 void drawEye(int cx, int cy) {
   for (int dx = -19; dx <= 19; dx++) {
     int yy = cy - 15 + (15 * dx * dx) / 361;
@@ -331,9 +313,6 @@ void showDizzy() {
   tft.drawCircle(80, 95, 5, MINT);
 }
 
-// ---------------- FISH: LOCAL REDRAW ONLY ----------------
-// Keep all static decorations OUTSIDE the three fish lanes.
-// Therefore clearing one tiny rectangle does not erase background art.
 void eraseFish(int x, int y) {
   int left = max(9, x - 16);
   int right = min(151, x + 17);
@@ -351,11 +330,11 @@ void paintFish(int x, int y, int dir, uint16_t color) {
   }
 }
 void drawFishBackdrop() {
-  tft.fillScreen(BG);     // ONLY once when entering fish page
+  tft.fillScreen(BG);     
   drawClockSmall();
   centerText("FISH TANK", 5, 1, MINT, 50, 110);
   tft.drawRoundRect(6, 19, 148, 92, 6, BLUE);
-  // Sea grass BELOW fish swimming lanes
+  
   for (int i = 0; i < 6; i++) {
     int x = 15 + i * 24;
     tft.drawLine(x, 107, x + 3, 97, GREEN);
@@ -381,12 +360,12 @@ void scareFish() {
   fishHoldUntil = millis() + 7000;
   for (int i = 0; i < 3; i++) fishDir[i] = fishX[i] < 80 ? -1 : 1;
 }
+// Update only the moving fish.
 void updateFish() {
   unsigned long now = millis();
-  if (now - fishFrameAt < 110) return; // <= 10 small sprite redraws/s
+  if (now - fishFrameAt < 110) return; 
   fishFrameAt = now;
 
-  // Erase ONLY old fish sprites, never the whole tank.
   for (int i = 0; i < 3; i++) eraseFish(fishX[i], fishY[i]);
 
   if (fishPhase == FISH_SWIM) {
@@ -426,7 +405,6 @@ void updateFish() {
   }
 }
 
-// ---------------- WEATHER ----------------
 const char* weatherDescription(int code) {
   if (code == 0) return "CLEAR";
   if (code <= 2) return "PARTLY CLOUDY";
@@ -439,7 +417,7 @@ const char* weatherDescription(int code) {
   if (code >= 95) return "STORM";
   return "WEATHER";
 }
-int weatherKind(int code) { // 1 sun, 2 cloud, 3 rain
+int weatherKind(int code) { 
   if (code <= 1) return 1;
   if (code == 2 || code == 3 || code == 45 || code == 48) return 2;
   return 3;
@@ -459,12 +437,13 @@ bool getNumber(const String& str, int at, const char* name, float& value) {
   value = str.substring(p, end).toFloat();
   return true;
 }
+// Fetch weather for the idle display.
 void fetchWeather() {
   weatherAttempted = true;
   weatherLastAttempt = millis();
   if (WiFi.status() != WL_CONNECTED) { weatherOK = false; return; }
   WiFiClientSecure client;
-  client.setInsecure(); // Prototype only; do not use for sensitive data.
+  client.setInsecure(); 
   HTTPClient http;
   http.setTimeout(1800);
   String url =
@@ -494,11 +473,11 @@ void paintCloud(int cx, int cy, uint16_t col) {
   tft.fillCircle(cx + 6, cy - 6, 14, col);
 }
 void drawWeatherIcon() {
-  tft.fillRect(43, 32, 74, 63, BG); // only icon area; not whole screen
-  int kind = weatherDemo ? weatherDemo : weatherKind(weatherCode);
+  tft.fillRect(43, 32, 74, 63, BG); 
+  int kind = weatherKind(weatherCode);
   int phase = weatherFrame % 4;
 
-  if (kind == 1) { // Sun with gently changing rays
+  if (kind == 1) { 
     tft.fillCircle(80, 64, 15, GOLD);
     int radius = 23 + (phase % 2) * 2;
     for (int i = 0; i < 8; i++) {
@@ -509,10 +488,10 @@ void drawWeatherIcon() {
       int y2 = 64 + (int)(sinf(a) * (radius + 6));
       tft.drawLine(x1, y1, x2, y2, GOLD);
     }
-  } else if (kind == 2) { // Cloud moving slightly left/right
+  } else if (kind == 2) { 
     paintCloud(80 + phase - 2, 62, GREY);
     paintCloud(62 + phase - 2, 68, WHITE_C);
-  } else { // Cloud and animated falling drops
+  } else { 
     paintCloud(80, 56, GREY);
     for (int i = 0; i < 4; i++) {
       int x = 60 + i * 13;
@@ -524,16 +503,13 @@ void drawWeatherIcon() {
 void drawWeatherPage() {
   tft.fillScreen(BG);
   drawClockSmall();
-  centerText(weatherDemo ? "WEATHER DEMO" : "LONDON WEATHER", 19, 1, MINT);
+  centerText("LONDON WEATHER", 19, 1, MINT);
   weatherFrame = 0;
   weatherAnimAt = millis();
   drawWeatherIcon();
 
   float temp = weatherTemp;
   const char* label = weatherDescription(weatherCode);
-  if (weatherDemo == 1) { temp = 22; label = "SUNNY"; }
-  if (weatherDemo == 2) { temp = 16; label = "CLOUDY"; }
-  if (weatherDemo == 3) { temp = 12; label = "RAINY"; }
   char t[20];
   snprintf(t, sizeof(t), "%.0f C", temp);
   centerText(t, 97, 2, WHITE_C);
@@ -546,7 +522,6 @@ void updateWeatherIcon() {
   drawWeatherIcon();
 }
 
-// ---------------- IDLE ----------------
 void switchIdlePage(IdlePage next) {
   idlePage = next;
   lastIdlePageAt = millis();
@@ -563,22 +538,12 @@ void switchIdlePage(IdlePage next) {
 }
 void showIdle() {
   mode = IDLE;
-  weatherDemo = 0;
   lastInteractionAt = millis();
   fishHoldUntil = 0;
   switchIdlePage(EYES_PAGE);
 }
 void updateIdle() {
   unsigned long now = millis();
-
-  if (weatherDemo) {
-    updateWeatherIcon();
-    if (now >= weatherDemoUntil) {
-      weatherDemo = 0;
-      showIdle();
-    }
-    return;
-  }
 
   if (idlePage == FISH_PAGE) {
     updateFish();
@@ -609,26 +574,10 @@ void updateIdle() {
     }
   }
 }
-void processWeatherDemo() {
-  while (Serial.available() > 0) {
-    char c = (char)Serial.read();
-    if (c == '0' && mode == IDLE) {
-      showIdle();
-      Serial.println("WEATHER DEMO OFF");
-    } else if (c >= '1' && c <= '3' && mode == IDLE) {
-      weatherDemo = c - '0';
-      weatherDemoUntil = millis() + 12000;
-      switchIdlePage(WEATHER_PAGE);
-      Serial.print("WEATHER DEMO ");
-      Serial.println(weatherDemo);
-    }
-  }
-}
+// Queue one audio event.
+void requestAudioTrack(uint8_t trackNumber);
 
-// ---------------- WIRELESS AUDIO CONTROL ----------------
-// The DFPlayer is physically connected to the ESP8266, not the ESP32.
-// Event messages use a separate packet prefix to avoid altering MMTRAY6 status.
-// The ESP8266 de-duplicates the packet ID because UDP may be repeated or lost.
+// Queue one audio event.
 void requestAudioTrack(uint8_t trackNumber) {
   if (trackNumber < 1 || trackNumber > 3) return;
   queuedAudioTrack = trackNumber;
@@ -640,6 +589,7 @@ void requestAudioTrack(uint8_t trackNumber) {
                 (unsigned long)queuedAudioCommandId);
 }
 
+// Retry the queued event while the tray is online.
 void sendQueuedAudio() {
   if (queuedAudioTrack == 0 || audioCopiesSent >= AUDIO_SEND_COPIES) return;
   if (millis() - audioQueuedAt > AUDIO_COMMAND_TTL_MS) {
@@ -665,14 +615,12 @@ void sendQueuedAudio() {
   }
 }
 
-// Monitor the currently active task's own estimate, not the departure clock.
-// A 30-second warning and an overdue warning occur at most once per task.
+// Send warning and overdue cues once per task.
 void updateTaskAudio() {
   if (mode != TASK_RUNNING) return;
   unsigned long elapsed = (millis() - taskStartedAt) / 1000UL;
-  unsigned long estimate = TASKS[currentStep].estimatedSec;
-  if (!warningSoundPlayed && estimate > 30 && elapsed >= estimate - 30 &&
-      elapsed < estimate) {
+  unsigned long estimate = currentTaskBudgetSec;
+  if (!warningSoundPlayed && elapsed < estimate && estimate - elapsed <= 30) {
     warningSoundPlayed = true;
     requestAudioTrack(AUDIO_WARNING_TRACK);
   }
@@ -682,7 +630,6 @@ void updateTaskAudio() {
   }
 }
 
-// ---------------- TRAY (same V6 protocol) ----------------
 void applyTrayPresence(bool present) {
   bool firstPacket = !trayEverReceived;
   bool changed = firstPacket || (trayPresent != present);
@@ -709,6 +656,7 @@ void applyTrayPresence(bool present) {
     Serial.println(trayOnline() ? "YES" : "NO");
   }
 }
+// Read the latest key-tray status.
 void receiveTray() {
   if (WiFi.status() != WL_CONNECTED) return;
   int size = trayUdp.parsePacket();
@@ -717,7 +665,7 @@ void receiveTray() {
     int n = trayUdp.read(b, sizeof(b) - 1);
     if (n > 0) {
       b[n] = '\0';
-      // Any valid tray packet identifies the tray's current Wi-Fi address.
+      
       if (strcmp(b, "MMTRAY6,1") == 0 || strcmp(b, "MMTRAY6,0") == 0) {
         lastTraySenderIP = trayUdp.remoteIP();
         trayAddressKnown = true;
@@ -734,14 +682,12 @@ void receiveTray() {
   }
 }
 
-// ---------------- SETTING: NO FULLSCREEN REDRAW ON EACH CLICK ----------------
+// Update the time digits without clearing the screen.
 void drawSettingValues() {
   if (mode != SET_HOUR && mode != SET_MINUTE) return;
   char b[12];
   snprintf(b, sizeof(b), "%02d:%02d", targetHour, targetMinute);
 
-  // Update only the clock digits and the active-field underline.
-  // No extra labels, no entire-screen redraw.
   tft.fillRect(4, 53, 152, 57, BG);
   centerText(b, 56, 3, WHITE_C);
   if (mode == SET_HOUR) {
@@ -755,7 +701,7 @@ void drawSettingFooter() {
   centerText(realClock() ? "TAP HEAD: START" : "WAIT FOR TIME SYNC",
              117, 1, realClock() ? MINT : GOLD);
 }
-void showSettingFrame() { // Called ONLY when first entering settings
+void showSettingFrame() { 
   tft.fillScreen(BG);
   centerText("DEPART AT", 11, 2, MINT);
   drawSettingValues();
@@ -766,10 +712,8 @@ void enterSetting() {
   showSettingFrame();
 }
 
-// ---------------- TASK SCREEN ----------------
-// Minimal hand-drawn key icon: no emoji/font dependency.
 void drawSmallKeyIcon() {
-  // Ring, shaft and two small teeth; fits inside right sidebar.
+  
   tft.drawCircle(131, 46, 7, GOLD);
   tft.drawCircle(131, 46, 6, GOLD);
   tft.drawCircle(131, 46, 3, GOLD);
@@ -782,9 +726,6 @@ void drawSmallKeyIcon() {
 void drawKeySide() {
   if (mode != TASK_RUNNING) return;
 
-  // Three session states: ON TRAY -> key drawing,
-  // NOT IN -> no drawing,
-  // UNKNOWN -> ?; OFFLINE -> ?.
   String status = trayOnline() ?
       (keyState == KEY_IN ? "IN" :
        keyState == KEY_NOT_IN ? "NOT_IN" : "UNKNOWN")
@@ -793,7 +734,6 @@ void drawKeySide() {
   if (status == cachedKeyState) return;
   cachedKeyState = status;
 
-  // Only update the icon area, leaving all task text intact.
   tft.fillRect(118, 33, 42, 46, BG);
 
   if (!trayOnline()) {
@@ -803,12 +743,12 @@ void drawKeySide() {
   } else if (keyState == KEY_UNKNOWN) {
     centerText("?", 43, 3, DIM, 117, 43);
   }
-  // KEY_NOT_IN: icon area intentionally empty.
+  
 }
 void drawTaskRemaining() {
   if (mode != TASK_RUNNING) return;
   long elapsed = (long)((millis() - taskStartedAt) / 1000UL);
-  long remain = (long)TASKS[currentStep].estimatedSec - elapsed;
+  long remain = (long)currentTaskBudgetSec - elapsed;
   unsigned long a = remain < 0 ? (unsigned long)(-remain) : (unsigned long)remain;
   char b[25];
   snprintf(b, sizeof(b), "%s%lu:%02lu",
@@ -819,6 +759,7 @@ void drawTaskRemaining() {
   tft.fillRect(2, 104, 110, 12, BG);
   centerText(b, 106, 1, remain < 0 ? GOLD : MINT, 0, 115);
 }
+// Show the current task and key status.
 void drawTaskScreen() {
   mode = TASK_RUNNING;
   tft.fillScreen(BG);
@@ -836,7 +777,7 @@ void drawTaskScreen() {
   tft.drawFastVLine(115, 19, 109, DIM);
 
   char est[24];
-  snprintf(est, sizeof(est), "EST %u MIN", (s.estimatedSec + 59) / 60);
+  snprintf(est, sizeof(est), "EST %lu:%02lu", currentTaskBudgetSec / 60, currentTaskBudgetSec % 60);
   centerText(est, 92, 1, DIM, 0, 115);
 
   drawKeySide();
@@ -844,7 +785,24 @@ void drawTaskScreen() {
   lastTaskTimeUpdate = millis();
 }
 
-// ---------------- TASK LOGIC ----------------
+// Divide the remaining departure time between the remaining tasks.
+void allocateCurrentTaskBudget() {
+  time_t now = time(nullptr);
+  unsigned long available = departureEpoch > now ?
+      (unsigned long)(departureEpoch - now) : 0UL;
+  unsigned long totalWeight = 0;
+  for (int i = currentStep; i < TASK_COUNT; ++i) totalWeight += TASKS[i].weight;
+  currentTaskBudgetSec = totalWeight ?
+      (unsigned long)(((uint64_t)available * TASKS[currentStep].weight) / totalWeight) : 0UL;
+  
+  if (available && !currentTaskBudgetSec) currentTaskBudgetSec = 1;
+  
+if (currentTaskBudgetSec > 45) {
+  currentTaskBudgetSec = 45;
+}
+  Serial.printf("TASK %d: available=%lu s, budget=%lu s\n",
+                currentStep + 1, available, currentTaskBudgetSec);
+}
 void startTasks() {
   if (!realClock()) return;
   time_t now = time(nullptr);
@@ -868,6 +826,7 @@ void startTasks() {
     keySeenThisSession = true;
     keyState = KEY_IN;
   }
+  allocateCurrentTaskBudget();
   taskStartedAt = millis();
   warningSoundPlayed = false;
   overdueSoundPlayed = false;
@@ -877,6 +836,7 @@ void startTasks() {
   lastHeadReminder = millis();
   drawTaskScreen();
 }
+// Show the final key check.
 void showFinal() {
   mode = FINAL_KEY;
   tft.fillScreen(BG);
@@ -908,7 +868,7 @@ void showUnknownConfirm() {
   centerText("PRESS KNOB: YES", 100, 1, MINT);
 }
 void showDone() {
-  // Completion music plays only after the final key check is accepted.
+  
   requestAudioTrack(AUDIO_COMPLETE_TRACK);
   mode = COMPLETED;
   ledStop();
@@ -919,8 +879,11 @@ void showDone() {
   swingHead();
 }
 void nextStep() {
+  
+  queuedAudioTrack = 0;
   if (currentStep < TASK_COUNT - 1) {
     currentStep++;
+    allocateCurrentTaskBudget();
     taskStartedAt = millis();
     warningSoundPlayed = false;
     overdueSoundPlayed = false;
@@ -934,12 +897,13 @@ void nextStep() {
   swingHead();
 }
 void resetRobot() {
-  // Reset active-task audio latches; keep the Wi-Fi connection alive.
+  
   queuedAudioTrack = 0;
   warningSoundPlayed = false;
   overdueSoundPlayed = false;
   currentStep = 0;
   taskStartedAt = 0;
+  currentTaskBudgetSec = 0;
   departureAlerted = false;
   manualKeyConfirmed = false;
   keySeenThisSession = false;
@@ -949,7 +913,7 @@ void resetRobot() {
   showIdle();
 }
 
-// ---------------- HEAD TOUCH ----------------
+// Handle a head tap according to the current screen.
 void onHeadTouch() {
   if (mode == IDLE) {
     if (idlePage == FISH_PAGE) { scareFish(); return; }
@@ -970,8 +934,7 @@ void onHeadTouch() {
   }
 }
 void onKnobShort() {
-  // One short press during task countdown resets to idle.
-  // Key check screens keep their confirmation behavior.
+
   if (mode == TASK_RUNNING) {
     Serial.println("BUTTON SHORT PRESS: RESET TASK");
     resetRobot();
@@ -979,7 +942,7 @@ void onKnobShort() {
   }
   if (mode == SET_HOUR) {
     mode = SET_MINUTE;
-    drawSettingValues();      // NO fillScreen()
+    drawSettingValues();      
   } else if (mode == SET_MINUTE) {
     mode = SET_HOUR;
     drawSettingValues();
@@ -994,7 +957,7 @@ void onKnobShort() {
   }
 }
 
-// ---------------- INPUT POLLING ----------------
+// Read the encoder button and touch sensor.
 void pollInputs() {
   unsigned long now = millis();
   int clk = digitalRead(ENC_CLK);
@@ -1035,7 +998,7 @@ void pollInputs() {
   }
 }
 
-// ---------------- WIFI ----------------
+// Handle Wi-Fi connection changes.
 void updateWiFi() {
   if (WiFi.status() == WL_CONNECTED) {
     if (!wifiStarted) {
@@ -1054,7 +1017,7 @@ void updateWiFi() {
       trayAddressKnown = false;
       keyDirty = true;
     }
-    // Avoid reconnect() while the radio is already associating.
+    
     wl_status_t state = WiFi.status();
     if (millis() - wifiRetryAt > 30000 &&
         (state == WL_DISCONNECTED ||
@@ -1073,7 +1036,7 @@ void updateWiFi() {
   }
 }
 
-// ---------------- MAIN RUNTIME ----------------
+// Update the active screen and timed reminders.
 void updateRuntime() {
   static bool wasOnline = false;
   bool online = trayOnline();
@@ -1097,7 +1060,7 @@ void updateRuntime() {
     updateTaskAudio();
     unsigned long now = millis();
     if (now - lastTaskTimeUpdate >= 1000) {
-      drawTaskRemaining();  // only 110 x 12 px
+      drawTaskRemaining();  
       lastTaskTimeUpdate = now;
     }
     if (realClock() && time(nullptr) >= departureEpoch && !departureAlerted) {
@@ -1113,8 +1076,8 @@ void updateRuntime() {
       swingHead();
     }
   }
-  // Fetch only while idle, no impact on active task timing.
-  if (mode == IDLE && idlePage == EYES_PAGE && !weatherDemo &&
+  
+  if (mode == IDLE && idlePage == EYES_PAGE &&
       wifiStarted && millis() > 15000 &&
       (!weatherAttempted || millis() - weatherLastAttempt >= 1800000UL)) {
     fetchWeather();
@@ -1143,19 +1106,18 @@ void setup() {
   headServo.write(SERVO_CENTER);
 
   randomSeed(micros());
+  nextAudioCommandId = esp_random();  
   showIdle();
   WiFi.mode(WIFI_STA);
   WiFi.setAutoReconnect(true);
   WiFi.begin(WIFI_NAME, WIFI_PASS);
   wifiRetryAt = millis();
-  Serial.println("THE MISSING MINUTES V11 READY");
-  Serial.println("WEATHER DEMO: 1=SUN 2=CLOUD 3=RAIN 0=EXIT");
+  Serial.println("THE MISSING MINUTES V13 READY");
 }
 void loop() {
   updateWiFi();
   receiveTray();
-  sendQueuedAudio();  // Non-blocking, repeated UDP delivery to the tray.
-  processWeatherDemo();
+  sendQueuedAudio();  
   pollInputs();
   updateServo();
   updateLed();

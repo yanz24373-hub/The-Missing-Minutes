@@ -1,46 +1,32 @@
+// Key tray: pressure sensing and serial audio playback.
 #include <Arduino.h>
 #include <ESP8266WiFi.h>
 #include <WiFiUdp.h>
 #include <SoftwareSerial.h>
-#include <DFRobotDFPlayerMini.h>
-#include "wifi_secrets.h"  // Create this local header from wifi_secrets.example.h.
 
-// THE MISSING MINUTES - ESP8266 KEY TRAY FINAL (V11 + MP3 PLAYBACK)
-// A0 reads the existing pressure-sensor analog output.
-// GPIO14 (D5) receives DFPlayer TX; GPIO12 (D6) sends to DFPlayer RX.
-// DFPlayer audio tracks are stored under /mp3/0001.mp3 through 0003.mp3.
-// This board continues to transmit the original MMTRAY6 status packets.
+#include "wifi_secrets.h"
 
 const uint16_t ROBOT_PORT = 4210;
 const uint16_t LOCAL_PORT = 4211;
 
-// Optional unicast fallback. The original V11 address is not portable.
-// Keep 0.0.0.0 to use subnet broadcast only (recommended for changing hotspots).
-// If your access point blocks device-to-device broadcast, set the robot IP here.
 IPAddress robotIP(0, 0, 0, 0);
 
 WiFiUDP udp;
 
-// NodeMCU labels: D5=GPIO14 (SoftwareSerial RX), D6=GPIO12 (TX).
-// Connect DFPlayer TX to D5 through a suitable 3.3 V level shifter/divider.
-// Connect D6 through a 1 kOhm resistor to DFPlayer RX.
-// Power DFPlayer from regulated 5 V, and share ground with the ESP8266.
-// Wire the 8-ohm speaker only between the DFPlayer SPK1 and SPK2 terminals.
+// D5 receives audio TX; D6 sends to audio RX through 1 kOhm.
+// This fitted module uses 3.3 V. All modules share ground.
 const uint8_t MP3_SOFT_RX = D5;
 const uint8_t MP3_SOFT_TX = D6;
 SoftwareSerial mp3Serial(MP3_SOFT_RX, MP3_SOFT_TX);
-DFRobotDFPlayerMini mp3;
-bool mp3Ready = false;
-const uint8_t MP3_VOLUME = 20;  // Valid range: 0 (mute) to 30 (maximum).
+
+const uint8_t MP3_VOLUME = 10;  
 uint32_t lastAudioCommandId = 0;
 bool audioCommandSeen = false;
 IPAddress broadcastIP(255, 255, 255, 255);
 
-// A0 must receive only the safe analog voltage for your NodeMCU board.
-// Do not connect 5 V directly to the ADC pin.
+// Keep A0 within the voltage limit of the fitted board.
 const int SENSOR_PIN = A0;
-// Starting thresholds based on earlier tray readings. Adjust after calibration.
-// Hysteresis avoids rapidly toggling presence near a single threshold.
+
 const int PRESSURE_ON = 300;
 const int PRESSURE_OFF = 150;
 const unsigned long STABLE_MS = 700;
@@ -56,7 +42,7 @@ unsigned long lastReadPrint = 0;
 unsigned long lastRetry = 0;
 int adcRaw = 0;
 
-// Average eight samples to reduce analog noise from the pressure sensor.
+// Average eight pressure readings.
 int readADC() {
   long sum = 0;
   for (int i = 0; i < 8; i++) {
@@ -66,7 +52,7 @@ int readADC() {
   return sum / 8;
 }
 
-// Use separate entry/exit thresholds and a stability interval.
+// Apply hysteresis and require a stable sensor change.
 void updatePressure() {
   adcRaw = readADC();
   bool sensed = keysPresent ?
@@ -89,7 +75,7 @@ void updatePressure() {
   }
 }
 
-// Compute a subnet-directed broadcast address from the current Wi-Fi settings.
+// Calculate the broadcast address for the current subnet.
 IPAddress networkBroadcast() {
   IPAddress ip = WiFi.localIP();
   IPAddress mask = WiFi.subnetMask();
@@ -100,7 +86,7 @@ IPAddress networkBroadcast() {
   return b;
 }
 
-// Maintain Wi-Fi without blocking the sensor or MP3 command receiver.
+// Handle Wi-Fi connection changes.
 void updateWiFi() {
   if (WiFi.status() == WL_CONNECTED) {
     if (!wifiUp) {
@@ -126,17 +112,16 @@ void updateWiFi() {
   }
 }
 
-// Preserve the exact text protocol expected by the existing ESP32 V11.
 bool sendPacket(IPAddress address) {
   if (!udp.beginPacket(address, ROBOT_PORT)) return false;
   udp.print(keysPresent ? "MMTRAY6,1" : "MMTRAY6,0");
   return udp.endPacket() == 1;
 }
 
+// Send the key state to the main robot.
 void sendState() {
   if (!wifiUp) return;
-  // Send both: broadcast helps with IP changes, unicast helps
-  // on routers/hotspots that don't relay broadcast between clients.
+
   bool broadcastSent = sendPacket(broadcastIP);
   bool unicastSent = robotIP != IPAddress(0, 0, 0, 0)
       ? sendPacket(robotIP) : false;
@@ -146,35 +131,50 @@ void sendState() {
   Serial.print(" | unicast="); Serial.println(unicastSent);
 }
 
-// ---------------- DFPLAYER MINI ----------------
-// The serial parser is disabled for acknowledgements to keep loop timing short.
-// Playback requires a compatible DFPlayer Mini, microSD card and speaker.
+// Write a command directly to the audio module.
+void sendMp3Command(uint8_t command, uint16_t parameter) {
+  uint8_t packet[10] = {0x7E, 0xFF, 0x06, command, 0x00,
+                        (uint8_t)(parameter >> 8), (uint8_t)parameter,
+                        0, 0, 0xEF};
+  uint16_t sum = 0;
+  for (int i = 1; i <= 6; ++i) sum += packet[i];
+  uint16_t checksum = (uint16_t)(0 - sum);
+  packet[7] = checksum >> 8;
+  packet[8] = checksum & 0xFF;
+  mp3Serial.write(packet, sizeof(packet));
+}
+
+// Set up the audio module and select the microSD card.
 void initializeMp3() {
   mp3Serial.begin(9600);
-  delay(1000);  // Give the MP3 module time to boot and mount the microSD card.
-  mp3Ready = mp3.begin(mp3Serial, false, true);
-  if (mp3Ready) {
-    mp3.volume(MP3_VOLUME);
-    Serial.println("MP3 READY");
-  } else {
-    Serial.println("MP3 NOT DETECTED: sensor and Wi-Fi remain operational");
-  }
+  delay(4000);  
+  sendMp3Command(0x09, 2);  
+  delay(1000);
+  sendMp3Command(0x06, 25);
+  delay(200);
+  Serial.println("MP3 UART INITIALIZED (playback not yet verified)");
 }
 
-// Play one of three defined audio events from the card's /mp3 directory.
-// 1=30-second task warning, 2=task overdue, 3=routine complete.
+// Play a numbered file from the mp3 folder.
 void playAudioTrack(uint8_t track) {
-  if (!mp3Ready) {
-    Serial.println("MP3 COMMAND IGNORED: module not ready");
-    return;
-  }
   if (track < 1 || track > 3) return;
-  mp3.playMp3Folder(track);
-  Serial.printf("MP3 PLAY: /mp3/%04u.mp3\n", track);
+  sendMp3Command(0x12, track);
+  Serial.printf("MP3 COMMAND SENT: /mp3/%04u.mp3\n", (unsigned int)track);
 }
 
-// Listen on LOCAL_PORT=4211 for ESP32-originated audio event commands.
-// The ESP32 repeats UDP packets; the sequence ID prevents duplicate playback.
+void localAudioTest() {
+  while (Serial.available()) {
+    char c = Serial.read();
+    if (c >= '1' && c <= '3') playAudioTrack(c - '0');
+    else if (c == '0') { sendMp3Command(0x16, 0); Serial.println("MP3 STOP SENT"); }
+    else if (c == '4') { sendMp3Command(0x03, 1); Serial.println("MP3 INDEX 1 SENT"); }
+  }
+  while (mp3Serial.available()) {
+    Serial.printf("MP3 RX: %02X\n", (unsigned int)mp3Serial.read());
+  }
+}
+
+// Read audio requests and ignore repeated command IDs.
 void receiveAudioCommands() {
   if (!wifiUp) return;
   int packetSize = udp.parsePacket();
@@ -188,7 +188,7 @@ void receiveAudioCommands() {
       if (sscanf(packet, "MMAUDIO,%u,%lu", &track, &commandId) == 2 &&
           track >= 1 && track <= 3 &&
           (!audioCommandSeen || commandId != lastAudioCommandId)) {
-        // Ignore unknown senders when the known main-controller IP is configured.
+        
         if (robotIP == IPAddress(0, 0, 0, 0) ||
             udp.remoteIP() == robotIP) {
           audioCommandSeen = true;
@@ -203,16 +203,17 @@ void receiveAudioCommands() {
 
 void setup() {
   Serial.begin(115200);
-  initializeMp3();  // Initialise sound once before entering the regular loop.
+  initializeMp3();  
   WiFi.mode(WIFI_STA);
   WiFi.setAutoReconnect(true);
   WiFi.begin(WIFI_NAME, WIFI_PASS);
   lastRetry = millis();
-  Serial.println("REAL KEY TRAY V11 READY");
+  Serial.println("KEY TRAY V12 READY: 1/2/3 play, 0 stop, 4 indexed track");
 }
 
 void loop() {
   updateWiFi();
+  localAudioTest();
   receiveAudioCommands();
   updatePressure();
   if (millis() - lastReadPrint >= 800) {
@@ -225,5 +226,5 @@ void loop() {
     lastSend = millis();
     sendState();
   }
-  delay(4);  // Yield to the ESP8266 Wi-Fi background tasks.
+  delay(4);  
 }

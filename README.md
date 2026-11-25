@@ -6,6 +6,18 @@ An interactive robotic companion for everyday departure routines. A rotary encod
 
 ![The Missing Minutes robot](media/robot1.png)
 
+## Project video
+
+[Watch or download the project demonstration](media/project-demo.mp4)
+
+The full 2 min 10 s video is included as a 720p H.264 copy with audio. The original 4K recording is retained locally.
+
+## Latest firmware
+
+The main sketch has been replaced with ESP32 V13 from `finalcode`, while keeping the existing Arduino folder name. The tray sketch is the latest matching version. Remaining time is reallocated between tasks using their weights. The supplied 45-second demo cap is retained. Tray audio now uses raw UART commands, with volume set to 10; DFRobotDFPlayerMini is no longer required. Create the local `wifi_secrets.h` files before compiling.
+
+Earlier diagrams and the technical appendix describe the previous firmware. Use these updated sketches for current behaviour and module configuration.
+
 ## Start here
 
 - [System architecture](docs/figures/system-architecture.svg)
@@ -34,11 +46,11 @@ media/             Two supplied robot photographs
 
 The ESP32 controls an ST7735 TFT, rotary encoder, digital head-touch input, servo and 33 WS2812-compatible LEDs. The ESP8266 reads an analogue pressure sensor and controls a DFPlayer Mini over software serial. The speaker connects to the DFPlayer. Both controllers join the same 2.4 GHz Wi-Fi network and exchange UDP packets.
 
-Arduino libraries: **Adafruit GFX Library**, **Adafruit ST7735 and ST7789 Library**, **Adafruit NeoPixel**, **ESP32Servo**, and **DFRobotDFPlayerMini**. The ESP8266 sketch also uses **SoftwareSerial** from the ESP8266 environment. Wi-Fi, UDP, HTTP, secure client and time support are supplied by the relevant board cores. See [setup](docs/SETUP.md) for board selection and configuration.
+Arduino libraries: **Adafruit GFX Library**, **Adafruit ST7735 and ST7789 Library**, **Adafruit NeoPixel**, **ESP32Servo**. The ESP8266 sketch also uses **SoftwareSerial** from the ESP8266 environment. Wi-Fi, UDP, HTTP, secure client and time support are supplied by the relevant board cores. See [setup](docs/SETUP.md) for board selection and configuration.
 
 ## Source and scope
 
-The two supplied sketches are preserved byte for byte, organised into Arduino-compatible folders. Pin assignments and behaviour in the documentation are derived from these sketches. Board-core/library versions, physical power distribution, exact module revisions, and printed-part settings are not recorded in the supplied files. This package has not been compiled or tested on hardware during documentation preparation.
+The latest supplied sketches are organised into Arduino-compatible folders. Comments were simplified, and Wi-Fi credentials were moved into local configuration headers. Executable logic is unchanged. Pin assignments and behaviour in the documentation are derived from these sketches. Board-core/library versions, physical power distribution, exact module revisions, and printed-part settings are not recorded in the supplied files. This package has not been compiled or tested on hardware during documentation preparation.
 
 The MP3 assets referenced by the tray firmware are not included. Supply `/mp3/0001.mp3`, `0002.mp3` and `0003.mp3` on the DFPlayer microSD card for warning, overdue and completion audio.
 
